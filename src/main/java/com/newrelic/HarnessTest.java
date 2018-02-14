@@ -26,6 +26,6 @@ public class HarnessTest {
 
         mapGraph.addEdge("E", "B", 3);
 
-        System.out.println(mapGraph.getVertices());
+//        System.out.println(mapGraph.getVertices());
     }
 }

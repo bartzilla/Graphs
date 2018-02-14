@@ -1,14 +1,14 @@
 package com.newrelic;
 
-import com.newrelic.MapEdge;
-
 import java.util.HashSet;
 import java.util.Set;
 
-public class MapNode {
+public class MapNode implements Comparable {
 
     private String name;
     private Set<MapEdge> edges;
+    private double distance;
+    public boolean visited;
 
     /**
      * Create a new MapNode at a given Geographic location
@@ -56,5 +56,27 @@ public class MapNode {
 
     public void setEdges(Set<MapEdge> edges) {
         this.edges = edges;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    // Code to implement Comparable
+    public int compareTo(Object o) {
+        // convert to map node, may throw exception
+        MapNode m = (MapNode)o;
+        return ((Double)this.getDistance()).compareTo((Double) m.getDistance());
+    }
+
+    public String toString()
+    {
+        String toReturn = "[NODE at location (" + name + ")";
+        toReturn += "]";
+        return toReturn;
     }
 }

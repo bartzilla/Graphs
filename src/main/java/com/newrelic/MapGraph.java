@@ -1,7 +1,5 @@
 package com.newrelic;
 
-import com.newrelic.MapEdge;
-
 import java.util.*;
 
 public class MapGraph {
@@ -67,18 +65,100 @@ public class MapGraph {
     }
 
 
+    public List<String> getNumberOfTripsWithMaximumStops(String start, String goal, int maxStops) {
 
-    public Map<String, MapNode> getVertices() {
-        return vertices;
+        // Setup - check validity of inputs
+        if (start == null || goal == null)
+            throw new NullPointerException("Cannot find route from or to null node");
+        MapNode startNode = vertices.get(start);
+        MapNode endNode = vertices.get(goal);
+        if (startNode == null) {
+            System.err.println("Start node " + start + " does not exist");
+            return null;
+        }
+        if (endNode == null) {
+            System.err.println("End node " + goal + " does not exist");
+            return null;
+        }
+
+        List<List<MapNode>> paths = new ArrayList<>();
+
+        recursive(0, startNode, endNode, paths, new LinkedHashSet<>());
+
+
+        return null;
     }
 
-    public void setVertices(Map<String, MapNode> vertices) {
-        this.vertices = vertices;
+    private void recursive(int iterations,  MapNode start, MapNode goal, List<List<MapNode>> paths, LinkedHashSet<MapNode> path) {
+        path.add(start);
+
+        if (!(iterations == 0) && start.equals(goal)) {
+            paths.add(new ArrayList<>(path));
+            path.remove(start);
+            return;
+        }
+
+        Set<MapNode> neighbors = start.getNeighbors();
+        for (MapNode neighbor : neighbors) {
+//            if (!path.contains(neighbor)) {
+                iterations++;
+                recursive (iterations, neighbor, goal, paths, path);
+//            }
+        }
+
+        path.remove(start);
     }
 
-//    public void setRoutes(String from, MapNode ) {
-//        this.routes = routes;
-//    }
+    public int dijkstraCoursera(String start, String goal) {
+
+        // Initialize data structures
+        Map<MapNode,MapNode> parentMap = new HashMap<>();
+        PriorityQueue<MapNode> priorityQueue = new PriorityQueue<>();
+        Set<MapNode> visited = new HashSet<>();
+
+        for (MapNode n : vertices.values()) {
+            n.setDistance(Double.POSITIVE_INFINITY);
+        }
+
+        MapNode startNode = vertices.get(start);
+
+        startNode.setDistance(0);
+        priorityQueue.add(startNode);
+        int iterations = 0;
+        while (!priorityQueue.isEmpty()) {
+            MapNode current = priorityQueue.remove();
+            iterations++;
+            if (!visited.contains(current)) {
+
+                if (!(iterations == 1) && start.equals(goal)) {
+                    visited.add(current);
+                }
+
+                Set<MapEdge> edges = current.getEdges();
+                for (MapEdge edge : edges) {
+
+                    MapNode neighbor = edge.getEnd();
+                    if (!visited.contains(neighbor)) {
+
+                        double currDist = edge.getWeight() + current.getDistance();
+
+                        if(currDist < neighbor.getDistance() || neighbor.getDistance() == 0 ){
+                            parentMap.put(neighbor, current);
+                            neighbor.setDistance(currDist);
+                            priorityQueue.add(neighbor);
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+
+        return (int) vertices.get(goal).getDistance();
+    }
+
 
     public int getDistance(String[] nodeKeys) {
 
@@ -106,13 +186,5 @@ public class MapGraph {
         }
 
         return distance;
-    }
-
-    public Set<MapEdge> getEdges() {
-        return edges;
-    }
-
-    public void setEdges(Set<MapEdge> edges) {
-        this.edges = edges;
     }
 }

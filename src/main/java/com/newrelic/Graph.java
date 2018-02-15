@@ -68,12 +68,15 @@ public class Graph {
         recursiveBSF(0, startNode, endNode, paths, new LinkedHashSet<>());
 
         int trips = 0;
+
+        // get all paths with less than maximum amount of stops
         for (List<Node> path : paths) {
             if (path.size() <= maxStops) {
                 trips++;
             }
         }
 
+        // return the computed amount of trips
         return trips;
     }
 
@@ -86,7 +89,7 @@ public class Graph {
      */
     public int getAmountOfRoutes(final String start, final String end, final int maxDistance) {
 
-        // Validate inpunt and get node objects for given keys.
+        // Validate input and get node objects for given keys.
         final Node startNode = validate(start);
         final Node endNode = validate(end);
 
@@ -194,14 +197,20 @@ public class Graph {
     private void recursiveBSF(int depth, final Node startNode, final Node endNode, final List<List<Node>> paths, final LinkedHashSet<Node> path) {
         path.add(startNode);
 
+        // In case start and end are the same in the first iteration do not include the path,
+        // it is necessary to traverse further
         if (!(depth == 0) && startNode.equals(endNode)) {
+            // update new path
             paths.add(new ArrayList<>(path));
             path.remove(startNode);
+
+            //step out of recursion and continue with next node
             return;
         }
 
         final Set<Node> neighbors = startNode.getNeighbors();
 
+        // Per neighbor of a current node start traverse further until recursiveBSF finds the endNode,
         for (final Node neighbor : neighbors) {
             depth++;
             recursiveBSF(depth, neighbor, endNode, paths, path);

@@ -65,7 +65,16 @@ class TrainsTest {
     public void calculateDistanceAED() {
         assertThrows(RuntimeException.class, ()-> {
                     final String[] nodeKeys = {"A", "E", "D"};
-                    graph.getDistance(nodeKeys);
-                });
+                    graph.getDistance(nodeKeys); });
+    }
+
+    @Test
+    public void shortestRouteLengthAC() {
+        assertEquals(9, graph.getShortestRoute("A", "C"));
+    }
+
+    @Test
+    public void shortestRouteLengthBB() {
+        assertEquals(9, graph.getShortestRoute("B", "B"));
     }
 }

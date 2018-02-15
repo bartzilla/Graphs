@@ -18,7 +18,6 @@ public class Edge {
         } else if (node.equals(end)){
             return start;
         }
-
         throw new IllegalArgumentException("Next node is not an edge");
     }
 

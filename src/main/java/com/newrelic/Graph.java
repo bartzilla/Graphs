@@ -11,9 +11,10 @@ import java.util.Set;
 
 public class Graph {
 
-    private static final String NO_SUCH_ROUTE_ERROR_MESSAGE = "NO SUCH ROUTE";
     private Map<String, Node> vertices;
     private Set<Edge> edges;
+
+    private static final String NO_SUCH_ROUTE_ERROR_MESSAGE = "NO SUCH ROUTE";
 
     public Graph() {
         this.vertices = new HashMap<>();
@@ -54,7 +55,6 @@ public class Graph {
         n1.addEdge(edge);
     }
 
-
     public List<String> getNumberOfTripsWithMaximumStops(String start, String goal, int maxStops) {
 
         // Setup - check validity of inputs
@@ -74,7 +74,6 @@ public class Graph {
         List<List<Node>> paths = new ArrayList<>();
 
         recursive(0, startNode, endNode, paths, new LinkedHashSet<>());
-
 
         return null;
     }
@@ -107,24 +106,25 @@ public class Graph {
         iterations = 0;
     }
 
-    public int dijkstraCoursera(String start, String goal) {
+    public int getShortestRoute(final String start, final String goal) {
 
         // Initialize data structures
-        Map<Node, Node> parentMap = new HashMap<>();
-        PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
-        Set<Node> visited = new HashSet<>();
+        final Map<Node, Node> parentMap = new HashMap<>();
+        final PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
+        final Set<Node> visited = new HashSet<>();
 
-        for (Node n : vertices.values()) {
+        for (final Node n : vertices.values()) {
             n.setDistance((int) Double.POSITIVE_INFINITY);
         }
 
-        Node startNode = vertices.get(start);
+        final Node startNode = vertices.get(start);
 
         startNode.setDistance(0);
         priorityQueue.add(startNode);
         int iterations = 0;
+
         while (!priorityQueue.isEmpty()) {
-            Node current = priorityQueue.remove();
+            final Node current = priorityQueue.remove();
             iterations++;
             if (!visited.contains(current)) {
 
@@ -132,13 +132,14 @@ public class Graph {
                     visited.add(current);
                 }
 
-                Set<Edge> edges = current.getEdges();
-                for (Edge edge : edges) {
+                final Set<Edge> edges = current.getEdges();
 
-                    Node neighbor = edge.getEnd();
+                for (final Edge edge : edges) {
+
+                    final Node neighbor = edge.getEnd();
                     if (!visited.contains(neighbor)) {
 
-                        int currDist = edge.getWeight() + current.getDistance();
+                        final int currDist = edge.getWeight() + current.getDistance();
 
                         if (currDist < neighbor.getDistance() || neighbor.getDistance() == 0) {
                             parentMap.put(neighbor, current);
@@ -146,17 +147,12 @@ public class Graph {
                             priorityQueue.add(neighbor);
                         }
                     }
-
                 }
-
             }
-
         }
 
-
-        return (int) vertices.get(goal).getDistance();
+        return vertices.get(goal).getDistance();
     }
-
 
     public int getDistance(final String[] nodeKeys) {
         int distance = 0;

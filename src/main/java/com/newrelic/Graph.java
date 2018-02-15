@@ -26,116 +26,46 @@ public class Graph {
         vertices.put(label, n);
     }
 
-    /**
-     * Adds a directed edge to the graph from pt1 to pt2.
-     * Precondition: Both GeographicPoints have already been added to the graph
-     *
-     * @param from   The starting point of the edge
-     * @param to     The ending point of the edge
-     * @param length The length of the road, in km
-     * @throws IllegalArgumentException If the points have not already been
-     *                                  added as nodes to the graph, if any of the arguments is null,
-     *                                  or if the length is less than 0.
-     */
-    public void addEdge(final String from, final String to, final int length) throws IllegalArgumentException {
+    public void addEdge(final String start, final String end, final int weight) throws IllegalArgumentException {
 
-        final Node n1 = vertices.get(from);
-        final Node n2 = vertices.get(to);
+        final Node startNode = validate(start);
+        final Node endNode = validate(end);
 
-        if (n1 == null) {
-            throw new IllegalArgumentException("Node \"from\": " + from + " is not in graph");
-        }
-
-        if (n2 == null) {
-            throw new IllegalArgumentException("Node \"to\":" + to + "is not in graph");
-        }
-
-        final Edge edge = new Edge(n1, n2, length);
+        final Edge edge = new Edge(startNode, endNode, weight);
         edges.add(edge);
-        n1.addEdge(edge);
+        startNode.addEdge(edge);
     }
 
-    public List<String> getNumberOfTripsWithMaximumStops(String start, String goal, int maxStops) {
+    public int getNumberOfTrips(final String start, final String end, final int maxStops) {
 
-        // Setup - check validity of inputs
-        if (start == null || goal == null)
-            throw new NullPointerException("Cannot find route from or to null node");
-        Node startNode = vertices.get(start);
-        Node endNode = vertices.get(goal);
-        if (startNode == null) {
-            System.err.println("Start node " + start + " does not exist");
-            return null;
-        }
-        if (endNode == null) {
-            System.err.println("End node " + goal + " does not exist");
-            return null;
-        }
+        final Node startNode = validate(start);
+        final Node endNode = validate(end);
 
         List<List<Node>> paths = new ArrayList<>();
 
-        recursive(0, startNode, endNode, paths, new LinkedHashSet<>());
+        recursiveBSF(0, startNode, endNode, paths, new LinkedHashSet<>());
 
-        return null;
-    }
-
-    private void recursive(Integer iterations, Node start, Node goal, List<List<Node>> paths, LinkedHashSet<Node> path) {
-        path.add(start);
-
-        if (start.equals(goal)) {
-            paths.add(new ArrayList<>(path));
-            Set<Node> neighbors = goal.getNeighbors();
-            path.clear();
-        } else if (iterations == 4) {
-//            paths.add(new ArrayList<>(path));
-            List<Node> nodes = new ArrayList<>(paths.get(paths.size() - 1));
-            nodes.add(start);
-            paths.add(new ArrayList<>(nodes));
-            path.remove(start);
-//            return;
-        }
-
-        Set<Node> neighbors = start.getNeighbors();
-        for (Node neighbor : neighbors) {
-            if (!path.contains(neighbor) && iterations < 4) {
-                iterations++;
-                recursive(iterations, neighbor, goal, paths, path);
+        int trips = 0;
+        for (List<Node> path : paths) {
+            if (path.size() <= maxStops) {
+                trips++;
             }
         }
 
-        path.remove(start);
-        iterations = 0;
+        return trips;
     }
 
-    public int diferentRoutes(final String start, final String goal, final int maxStops) {
-        return diferentRoutes(start, goal, 0, maxStops);
-    }
+    public int getAmountOfRoutes(final String start, final String end, final int maxStops) {
 
-    private int diferentRoutes(final String start, final String goal, int distance, final int maxStops) {
-        final Set<Edge> edges = this.vertices.get(start).getEdges();
+        final Node startNode = validate(start);
+        final Node endNode = validate(end);
 
-        int routes = 0;
-        for (final Edge edge : edges) {
-            distance += edge.getWeight();
-
-            if(distance < maxStops) {
-                if(edge.getEnd().getLabel().equals(goal)) {
-                    routes++;
-                    routes += diferentRoutes(edge.getEnd().getLabel(), goal, distance, maxStops);
-                }
-                else {
-                    routes += diferentRoutes(edge.getEnd().getLabel(), goal, distance, maxStops);
-                    distance -= edge.getWeight();
-                }
-            }
-        }
-
-        return routes;
+        return amountOfRoutes(startNode, endNode, 0, maxStops);
     }
 
     public int getShortestRoute(final String start, final String goal) {
 
         // Initialize data structures
-        final Map<Node, Node> parentMap = new HashMap<>();
         final PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
         final Set<Node> visited = new HashSet<>();
 
@@ -168,7 +98,6 @@ public class Graph {
                         final int currentDistance = edge.getWeight() + current.getDistance();
 
                         if (currentDistance < neighbor.getDistance() || neighbor.getDistance() == 0) {
-                            parentMap.put(neighbor, current);
                             neighbor.setDistance(currentDistance);
                             priorityQueue.add(neighbor);
                         }
@@ -204,5 +133,60 @@ public class Graph {
         }
 
         return distance;
+    }
+
+    private void recursiveBSF(int depth, final Node startNode, final Node endNode, final List<List<Node>> paths, final LinkedHashSet<Node> path) {
+        path.add(startNode);
+
+        if (!(depth == 0) && startNode.equals(endNode)) {
+            paths.add(new ArrayList<>(path));
+            path.remove(startNode);
+            return;
+        }
+
+        final Set<Node> neighbors = startNode.getNeighbors();
+
+        for (final Node neighbor : neighbors) {
+            depth++;
+            recursiveBSF(depth, neighbor, endNode, paths, path);
+        }
+
+        path.remove(startNode);
+    }
+
+    private Node validate(final String nodeLabel) {
+        if (nodeLabel == null) {
+            throw new IllegalArgumentException("Cannot find route or null node");
+        }
+
+        final Node node = vertices.get(nodeLabel);
+
+        if (node == null) {
+            throw new IllegalArgumentException("Node:" + nodeLabel + "is not in graph");
+        }
+
+        return node;
+    }
+
+    private int amountOfRoutes(final Node startNode, final Node endNode, int distance, final int maxStops) {
+
+        final Set<Edge> edges = startNode.getEdges();
+
+        int routes = 0;
+        for (final Edge edge : edges) {
+            distance += edge.getWeight();
+
+            if (distance < maxStops) {
+                if (edge.getEnd().equals(endNode)) {
+                    routes++;
+                    routes += amountOfRoutes(edge.getEnd(), endNode, distance, maxStops);
+                } else {
+                    routes += amountOfRoutes(edge.getEnd(), endNode, distance, maxStops);
+                    distance -= edge.getWeight();
+                }
+            }
+        }
+
+        return routes;
     }
 }

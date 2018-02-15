@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class TrainsTest {
+class GraphTest {
 
     private Graph graph;
 
@@ -34,52 +34,62 @@ class TrainsTest {
         graph.addEdge("D", "E", 6);
 
         graph.addEdge("E", "B", 3);
-
     }
 
     @Test
-    public void calculateDistanceABC() {
+    void calculateDistanceABC() {
         final String[] nodeKeys = {"A", "B", "C"};
         assertEquals(9, graph.getDistance(nodeKeys));
     }
 
     @Test
-    public void calculateDistanceAD() {
+    void calculateDistanceAD() {
         final String[] nodeKeys = {"A", "D"};
         assertEquals(5, graph.getDistance(nodeKeys));
     }
 
     @Test
-    public void calculateDistanceADC() {
+    void calculateDistanceADC() {
         final String[] nodeKeys = {"A", "D", "C"};
         assertEquals(13, graph.getDistance(nodeKeys));
     }
 
     @Test
-    public void calculateDistanceAEBCD() {
+    void calculateDistanceAEBCD() {
         final String[] nodeKeys = {"A", "E", "B", "C", "D"};
         assertEquals(22, graph.getDistance(nodeKeys));
     }
 
     @Test
-    public void calculateDistanceAED() {
-        assertThrows(RuntimeException.class, ()-> {
-                    final String[] nodeKeys = {"A", "E", "D"};
-                    graph.getDistance(nodeKeys); });
+    void calculateDistance_AED() {
+        assertThrows(RuntimeException.class, () -> {
+            final String[] nodeKeys = {"A", "E", "D"};
+            graph.getDistance(nodeKeys);
+        });
     }
 
     @Test
-    public void shortestRouteLengthAC() {
+    void numberOfTrips_Max_3Stops_CC() {
+        assertEquals(2, graph.getNumberOfTrips("C", "C", 3));
+    }
+
+    @Test
+    void numberOfTrips_Max_4Stops_AC() {
+        assertEquals(3, graph.getNumberOfTrips("A", "C", 4));
+    }
+
+    @Test
+    void shortestRouteLengthAC() {
         assertEquals(9, graph.getShortestRoute("A", "C"));
     }
 
     @Test
-    public void shortestRouteLengthBB() {
+    void shortestRouteLengthBB() {
         assertEquals(9, graph.getShortestRoute("B", "B"));
     }
 
     @Test
-    public void numberOfRoutesDistanceLessThan30() {
-        assertEquals(7, graph.diferentRoutes("C", "C", 30));
+    void numberOfRoutesDistanceLessThan30() {
+        assertEquals(7, graph.getAmountOfRoutes("C", "C", 30));
     }
 }

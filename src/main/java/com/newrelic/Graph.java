@@ -106,6 +106,32 @@ public class Graph {
         iterations = 0;
     }
 
+    public int diferentRoutes(final String start, final String goal, final int maxStops) {
+        return diferentRoutes(start, goal, 0, maxStops);
+    }
+
+    private int diferentRoutes(final String start, final String goal, int distance, final int maxStops) {
+        final Set<Edge> edges = this.vertices.get(start).getEdges();
+
+        int routes = 0;
+        for (final Edge edge : edges) {
+            distance += edge.getWeight();
+
+            if(distance < maxStops) {
+                if(edge.getEnd().getLabel().equals(goal)) {
+                    routes++;
+                    routes += diferentRoutes(edge.getEnd().getLabel(), goal, distance, maxStops);
+                }
+                else {
+                    routes += diferentRoutes(edge.getEnd().getLabel(), goal, distance, maxStops);
+                    distance -= edge.getWeight();
+                }
+            }
+        }
+
+        return routes;
+    }
+
     public int getShortestRoute(final String start, final String goal) {
 
         // Initialize data structures
@@ -121,14 +147,14 @@ public class Graph {
 
         startNode.setDistance(0);
         priorityQueue.add(startNode);
-        int iterations = 0;
+        int depth = 0;
 
         while (!priorityQueue.isEmpty()) {
             final Node current = priorityQueue.remove();
-            iterations++;
+            depth++;
             if (!visited.contains(current)) {
 
-                if (!(iterations == 1) && start.equals(goal)) {
+                if (!(depth == 1) && start.equals(goal)) {
                     visited.add(current);
                 }
 
@@ -139,11 +165,11 @@ public class Graph {
                     final Node neighbor = edge.getEnd();
                     if (!visited.contains(neighbor)) {
 
-                        final int currDist = edge.getWeight() + current.getDistance();
+                        final int currentDistance = edge.getWeight() + current.getDistance();
 
-                        if (currDist < neighbor.getDistance() || neighbor.getDistance() == 0) {
+                        if (currentDistance < neighbor.getDistance() || neighbor.getDistance() == 0) {
                             parentMap.put(neighbor, current);
-                            neighbor.setDistance(currDist);
+                            neighbor.setDistance(currentDistance);
                             priorityQueue.add(neighbor);
                         }
                     }

@@ -25,6 +25,10 @@ public class Edge {
         return end;
     }
 
+    public Node getStart() {
+        return start;
+    }
+
     public int getWeight() {
         return weight;
     }

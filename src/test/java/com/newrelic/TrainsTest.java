@@ -77,4 +77,9 @@ class TrainsTest {
     public void shortestRouteLengthBB() {
         assertEquals(9, graph.getShortestRoute("B", "B"));
     }
+
+    @Test
+    public void numberOfRoutesDistanceLessThan30() {
+        assertEquals(7, graph.diferentRoutes("C", "C", 30));
+    }
 }

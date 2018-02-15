@@ -17,7 +17,7 @@ class GraphTest {
     private Graph graph;
 
     @BeforeEach
-    void myFirstTest() {
+    void setup() {
 
         graph = new Graph();
 

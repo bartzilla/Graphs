@@ -1,81 +1,71 @@
 package com.newrelic;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TrainsTest {
 
-    @Test
+    private Graph graph;
+
+    @BeforeEach
     void myFirstTest() {
 
-        MapGraph mapGraph = new MapGraph();
+        graph = new Graph();
 
-//        mapGraph.addVertex("V0");
-//        mapGraph.addVertex("V1");
-//        mapGraph.addVertex("V2");
-//        mapGraph.addVertex("V3");
-//        mapGraph.addVertex("V4");
-//
-//        mapGraph.addEdge("V0", "V1", 2);
-//
-//        mapGraph.addEdge("V1", "V2", 1);
-//        mapGraph.addEdge("V1", "V4", 6);
-//
-//        mapGraph.addEdge("V2", "V3", 2);
-//        mapGraph.addEdge("V3", "V4", 1);
-//        mapGraph.addEdge("V4", "V1", 1);
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addVertex("D");
+        graph.addVertex("E");
 
-//        assertEquals(5, mapGraph.dijkstraCoursera("V1", "V1"));
+        graph.addEdge("A", "B", 5);
+        graph.addEdge("A", "E", 7);
+        graph.addEdge("A", "D", 5);
 
-        mapGraph.addVertex("A");
-        mapGraph.addVertex("B");
-        mapGraph.addVertex("C");
-        mapGraph.addVertex("D");
-        mapGraph.addVertex("E");
+        graph.addEdge("B", "C", 4);
 
-        mapGraph.addEdge("A", "B", 5);
-        mapGraph.addEdge("A", "E", 7);
-        mapGraph.addEdge("A", "D", 5);
+        graph.addEdge("C", "E", 2);
+        graph.addEdge("C", "D", 8);
 
-        mapGraph.addEdge("B", "C", 4);
+        graph.addEdge("D", "C", 8);
+        graph.addEdge("D", "E", 6);
 
-        mapGraph.addEdge("C", "E", 2);
-        mapGraph.addEdge("C", "D", 8);
+        graph.addEdge("E", "B", 3);
 
-        mapGraph.addEdge("D", "C", 8);
-        mapGraph.addEdge("D", "E", 6);
+    }
 
-        mapGraph.addEdge("E", "B", 3);
+    @Test
+    public void calculateDistanceABC() {
+        final String[] nodeKeys = {"A", "B", "C"};
+        assertEquals(9, graph.getDistance(nodeKeys));
+    }
 
-//        String[] nodeKeys = {"A", "B", "C"};
-//        assertEquals(9, mapGraph.getDistance(nodeKeys));
-//
-//        String[] nodeKeys2 = {"A", "D", };
-//        assertEquals(5, mapGraph.getDistance(nodeKeys2));
-//
-//        String[] nodeKeys3 = {"A", "D", "C"};
-//        assertEquals(13, mapGraph.getDistance(nodeKeys3));
-//
-//        String[] nodeKeys4 = {"A", "E", "B", "C", "D"};
-//        assertEquals(22, mapGraph.getDistance(nodeKeys4));
+    @Test
+    public void calculateDistanceAD() {
+        final String[] nodeKeys = {"A", "D"};
+        assertEquals(5, graph.getDistance(nodeKeys));
+    }
 
-//        String[] nodeKeys5 = {"A", "E", "D"};
-//        assertEquals(22, mapGraph.getDistance(nodeKeys5));
+    @Test
+    public void calculateDistanceADC() {
+        final String[] nodeKeys = {"A", "D", "C"};
+        assertEquals(13, graph.getDistance(nodeKeys));
+    }
 
+    @Test
+    public void calculateDistanceAEBCD() {
+        final String[] nodeKeys = {"A", "E", "B", "C", "D"};
+        assertEquals(22, graph.getDistance(nodeKeys));
+    }
 
-//        assertEquals(9, mapGraph.dijkstraCoursera("A", "C"));
-//        assertEquals(9, mapGraph.dijkstraCoursera("B", "B"));
-
-//        assertEquals(2, mapGraph.getNumberOfTripsWithMaximumStops("C", "C", 3));
-//        assertEquals(4, mapGraph.getNumberOfTripsWithMaximumStops("A", "C", 4));
-
-        System.out.println(mapGraph.getNumberOfTripsWithMaximumStops("C", "C", 3));
-        System.out.println(mapGraph.getNumberOfTripsWithMaximumStops("A", "C", 4));
-
+    @Test
+    public void calculateDistanceAED() {
+        assertThrows(RuntimeException.class, ()-> {
+                    final String[] nodeKeys = {"A", "E", "D"};
+                    graph.getDistance(nodeKeys);
+                });
     }
 }

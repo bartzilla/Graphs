@@ -6,6 +6,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/*
+ *  Test class to test Graph's functionality
+ *
+ *  @author Cipriano Sanchez
+ */
 class GraphTest {
 
     private Graph graph;

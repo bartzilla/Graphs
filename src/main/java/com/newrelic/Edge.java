@@ -1,5 +1,12 @@
 package com.newrelic;
 
+/*
+ *  Class representing edges. This class is used to model
+ *  train lines. Each edge contains information about the the edge starting node,
+ *  ending node, and its weight.
+ *
+ *  @author Cipriano Sanchez
+ */
 class Edge {
 
     private int weight;
@@ -26,6 +33,6 @@ class Edge {
         } else if (node.equals(end)) {
             return start;
         }
-        throw new IllegalArgumentException("Next node is not an edge");
+        throw new IllegalArgumentException("Next node is not in this edge");
     }
 }

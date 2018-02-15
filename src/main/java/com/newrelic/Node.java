@@ -3,6 +3,13 @@ package com.newrelic;
 import java.util.HashSet;
 import java.util.Set;
 
+/*
+ *  Class representing graph nodes. Each node is town
+ *  in Nerdland's train system. And each node contains
+ *  a set of weighted edges representing train lines.
+ *
+ *  @author Cipriano Sanchez
+ */
 class Node implements Comparable {
 
     private String label;
@@ -17,14 +24,9 @@ class Node implements Comparable {
     Set<Node> getNeighbors() {
         final Set<Node> neighbors = new HashSet<>();
 
-        for (final Edge edge : edges) {
-            neighbors.add(edge.getNextNode(this));
-        }
-        return neighbors;
-    }
+        edges.forEach(e->neighbors.add(e.getNextNode(this)));
 
-    void addEdge(final Edge edge) {
-        edges.add(edge);
+        return neighbors;
     }
 
     String getLabel() {
@@ -41,6 +43,10 @@ class Node implements Comparable {
 
     void setDistance(final int distance) {
         this.distance = distance;
+    }
+
+    void addEdge(final Edge edge) {
+        edges.add(edge);
     }
 
     public int compareTo(final Object o) {

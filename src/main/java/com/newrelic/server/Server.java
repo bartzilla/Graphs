@@ -1,4 +1,6 @@
-package com.newrelic;
+package com.newrelic.server;
+
+import com.newrelic.graph.Graph;
 
 import java.io.IOException;
 import java.io.PrintWriter;

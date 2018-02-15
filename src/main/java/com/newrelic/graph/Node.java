@@ -1,4 +1,4 @@
-package com.newrelic;
+package com.newrelic.graph;
 
 import java.util.HashSet;
 import java.util.Set;

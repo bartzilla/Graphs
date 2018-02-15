@@ -1,4 +1,4 @@
-/Users/ciprianosanchez/Desktop/NewRelic/trains/src/main/java/com/newrelic/Node.java
-/Users/ciprianosanchez/Desktop/NewRelic/trains/src/main/java/com/newrelic/Edge.java
-/Users/ciprianosanchez/Desktop/NewRelic/trains/src/main/java/com/newrelic/Graph.java
-/Users/ciprianosanchez/Desktop/NewRelic/trains/src/main/java/com/newrelic/Server.java
+/Users/ciprianosanchez/Desktop/NewRelic/trains/src/main/java/com/newrelic/graph/Edge.java
+/Users/ciprianosanchez/Desktop/NewRelic/trains/src/main/java/com/newrelic/graph/Node.java
+/Users/ciprianosanchez/Desktop/NewRelic/trains/src/main/java/com/newrelic/server/Server.java
+/Users/ciprianosanchez/Desktop/NewRelic/trains/src/main/java/com/newrelic/graph/Graph.java

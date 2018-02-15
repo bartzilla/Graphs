@@ -1,4 +1,4 @@
-package com.newrelic;
+package com.newrelic.graph;
 
 /*
  *  Class representing edges. This class is used to model

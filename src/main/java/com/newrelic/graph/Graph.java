@@ -1,4 +1,4 @@
-package com.newrelic;
+package com.newrelic.graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;

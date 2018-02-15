@@ -1,4 +1,4 @@
-com/newrelic/Node.class
-com/newrelic/Edge.class
-com/newrelic/Server.class
-com/newrelic/Graph.class
+com/newrelic/graph/Edge.class
+com/newrelic/graph/Graph.class
+com/newrelic/graph/Node.class
+com/newrelic/server/Server.class

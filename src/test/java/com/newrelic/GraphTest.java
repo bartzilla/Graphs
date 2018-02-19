@@ -79,8 +79,13 @@ class GraphTest {
         assertEquals(2, graph.getNumberOfTrips("C", "C", 3));
     }
 
+    // THIS OUTPUT IS ACTUALLY WRONG IT TURNS OUT IT RETURNS THE SAME AMOUNT OF ROUTES.
+    // However, getNumberOfTrips doesn't support cyclic graphs and so as soon as the end target is found
+    // it won't continue traversing to reach the max of stops in nodes with cycles.
+    // e.g. In A: D-C-D-C when target C is found the traversal will stop and mark a route with 2 stops, and
+    // same for other combinations.
     @Test
-    void numberOfTrips_Max_4Stops_AC() {
+    void numberOfTrips_Exactly_4Stops_AC() {
         assertEquals(3, graph.getNumberOfTrips("A", "C", 4));
     }
 

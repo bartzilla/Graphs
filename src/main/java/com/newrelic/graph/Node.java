@@ -10,7 +10,7 @@ import java.util.Set;
  *
  *  @author Cipriano Sanchez
  */
-class Node implements Comparable {
+class Node implements Comparable<Node> {
 
     private String label;
     private Set<Edge> edges;
@@ -49,8 +49,8 @@ class Node implements Comparable {
         edges.add(edge);
     }
 
-    public int compareTo(final Object o) {
-        final Node m = (Node) o;
-        return Integer.compare(this.getDistance(), m.getDistance());
+    @Override
+    public int compareTo(Node o) {
+        return Integer.compare(this.getDistance(), o.getDistance());
     }
 }

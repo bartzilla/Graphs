@@ -1,4 +1,4 @@
-package com.newrelic.graph;
+package com.bartzilla.graph;
 
 import java.util.HashSet;
 import java.util.Set;

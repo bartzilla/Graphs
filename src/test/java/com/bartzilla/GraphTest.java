@@ -1,17 +1,12 @@
-package com.newrelic;
+package com.bartzilla;
 
-import com.newrelic.graph.Graph;
+import com.bartzilla.graph.Graph;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/*
- *  Test class to test Graph's functionality
- *
- *  @author Cipriano Sanchez
- */
 class GraphTest {
 
     private Graph graph;
@@ -101,6 +96,6 @@ class GraphTest {
 
     @Test
     void numberOfRoutesDistanceLessThan30() {
-        assertEquals(7, graph.getAmountOfRoutes("C", "C", 30));
+        assertEquals(3, graph.getAmountOfRoutes("A", "D", 22));
     }
 }

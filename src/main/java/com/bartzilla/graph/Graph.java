@@ -1,4 +1,4 @@
-package com.newrelic.graph;
+package com.bartzilla.graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,10 +65,12 @@ public class Graph {
 
         List<List<Node>> paths = new ArrayList<>();
 
+        // send and update the path reference
         recursiveBSF(0, startNode, endNode, paths, new LinkedHashSet<>());
 
         int trips = 0;
 
+        // paths will contain all possible trips from start to end so then
         // get all paths with less than maximum amount of stops
         for (List<Node> path : paths) {
             if (path.size() <= maxStops) {
@@ -140,6 +142,7 @@ public class Graph {
                     final Node neighbor = edge.getEnd();
                     if (!visited.contains(neighbor)) {
 
+                        // Accumulate the distance in order to append it to node
                         final int currentDistance = edge.getWeight() + current.getDistance();
 
                         // If path through current node is shorter update distance.
@@ -234,6 +237,9 @@ public class Graph {
                     amount += amountOfRoutes(edge.getEnd(), endNode, distance, maxDistance);
                 } else {
                     amount += amountOfRoutes(edge.getEnd(), endNode, distance, maxDistance);
+                    // Since we were going too deep in the graph and it was not the right path becuase
+                    // distance already exceeded maxDistance and end node was not found
+                    // decrease the distance it took to go to that node.
                     distance -= edge.getWeight();
                 }
             }

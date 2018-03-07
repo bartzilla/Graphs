@@ -1,4 +1,4 @@
-package com.newrelic.graph;
+package com.bartzilla.graph;
 
 /*
  *  Class representing edges. This class is used to model

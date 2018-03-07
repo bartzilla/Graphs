@@ -1,6 +1,6 @@
-package com.newrelic.server;
+package com.bartzilla.server;
 
-import com.newrelic.graph.Graph;
+import com.bartzilla.graph.Graph;
 
 import java.io.IOException;
 import java.io.PrintWriter;
